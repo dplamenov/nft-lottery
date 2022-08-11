@@ -35,7 +35,7 @@ contract Ticket is ERC721Upgradeable {
         ticketPrice = _ticketPrice;
     }
 
-    function buyTicket() active {
+    function buyTicket() external active nonReentrant {
         if (msg.value < ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
         ++tokenCount;
