@@ -3,11 +3,13 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./RandomWinner.sol";
 
 error InsufficientAmount();
 error WinnerAlreadyChosen();
 error Unavailable();
 error GameNotStarted();
+error OnlyRandomWinnerContract();
 
 contract Ticket is ERC721Upgradeable {
     uint64 public startBlock;
@@ -16,11 +18,17 @@ contract Ticket is ERC721Upgradeable {
     uint256 public tokenCount;
 
     string baseURI;
+    RandomWinner randomWinner;
 
     modifier active() {
         if (block.number < startBlock || block.numer > endBlock)
             revert Unavailable();
         _;
+    }
+
+    modifier onlyRandomWinner() {
+        if (msg.sender != address(randomWinner))
+            revert OnlyRandomWinnerContract();
     }
 
     function initialize(
@@ -29,13 +37,15 @@ contract Ticket is ERC721Upgradeable {
         string memory _baseURI,
         uint64 _start,
         uint64 _end,
-        uint128 _ticketPrice
+        uint128 _ticketPrice,
+        address _randomWinnerAddress
     ) external initializer {
         __ERC721_init(_name, _symbol);
         baseURI = _baseURI;
         startBlock = _start;
         endBlock = _end;
         ticketPrice = _ticketPrice;
+        randomWinner = RandomWinner(_randomWinnerAddress);
     }
 
     function buyTicket() external active nonReentrant {
@@ -57,6 +67,21 @@ contract Ticket is ERC721Upgradeable {
             (block.number < end && pickedSmall) ||
             (block.number >= end && pickedBig)
         ) revert WinnerAlreadyChosen();
+
+        randomWinner.getRandomNumber("win(uint256)");
+    }
+
+    function win(uint256 randomness) external payable onlyRandomWinner {
+        if (block.number < startBlock) revert GameNotStarted();
+
+        uint256 winningTokenId = _randomness % tokenCount;
+        address winnerAddress = ownerOf(winningTokenId);
+
+        uint256 rewardAmount = block.number < end
+            ? address(this).balance / 2
+            : address(this).balance;
+
+        payable(owner).transfer(rewardAmount);
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
