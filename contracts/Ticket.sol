@@ -38,6 +38,12 @@ contract Ticket is ERC721Upgradeable {
         if (msg.value < ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
         ++tokenCount;
+
+        uint256 change = ticketPrice - msg.value;
+
+        if (change >= 1 wei) {
+            payable(msg.sender).transfer(change);
+        }
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
