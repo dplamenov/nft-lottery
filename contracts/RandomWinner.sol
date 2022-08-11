@@ -26,6 +26,7 @@ contract RandomWinner is VRFConsumerBase {
         returns (bytes32 requestId)
     {
         uint32 size;
+        address _addr = msg.sender;
         assembly {
             size := extcodesize(_addr)
         }
