@@ -5,6 +5,9 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 error InsufficientAmount();
+error WinnerAlreadyChosen();
+error Unavailable();
+error GameNotStarted();
 
 contract Ticket is ERC721Upgradeable {
     uint64 public startBlock;
@@ -45,6 +48,15 @@ contract Ticket is ERC721Upgradeable {
         if (change >= 1 wei) {
             payable(msg.sender).transfer(change);
         }
+    }
+
+    function pickWinner() external initializer {
+        if (block.number < startBlock) revert GameNotStarted();
+
+        if (
+            (block.number < end && pickedSmall) ||
+            (block.number >= end && pickedBig)
+        ) revert WinnerAlreadyChosen();
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
