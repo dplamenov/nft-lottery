@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./RandomWinner.sol";
 
 error InsufficientAmount();
@@ -11,17 +11,19 @@ error Unavailable();
 error GameNotStarted();
 error OnlyRandomWinnerContract();
 
-contract Ticket is ERC721Upgradeable {
+contract Ticket is ERC721Upgradeable, ReentrancyGuardUpgradeable {
     uint64 public startBlock;
     uint64 public endBlock;
     uint256 public ticketPrice;
     uint256 public tokenCount;
 
+    bool isPickedSmall;
+    bool isPickedBig;
     string baseURI;
     RandomWinner randomWinner;
 
     modifier active() {
-        if (block.number < startBlock || block.numer > endBlock)
+        if (block.number < startBlock || block.number > endBlock)
             revert Unavailable();
         _;
     }
@@ -29,6 +31,7 @@ contract Ticket is ERC721Upgradeable {
     modifier onlyRandomWinner() {
         if (msg.sender != address(randomWinner))
             revert OnlyRandomWinnerContract();
+        _;
     }
 
     modifier gameStarted() {
@@ -53,7 +56,7 @@ contract Ticket is ERC721Upgradeable {
         randomWinner = RandomWinner(_randomWinnerAddress);
     }
 
-    function buyTicket() external active nonReentrant {
+    function buyTicket() external payable active nonReentrant {
         if (msg.value < ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
         ++tokenCount;
@@ -67,8 +70,8 @@ contract Ticket is ERC721Upgradeable {
 
     function pickWinner() external gameStarted initializer {
         if (
-            (block.number < end && pickedSmall) ||
-            (block.number >= end && pickedBig)
+            (block.number < endBlock && isPickedSmall) ||
+            (block.number >= endBlock && isPickedBig)
         ) revert WinnerAlreadyChosen();
 
         randomWinner.getRandomNumber("win(uint256)");
@@ -80,14 +83,14 @@ contract Ticket is ERC721Upgradeable {
         gameStarted
         onlyRandomWinner
     {
-        uint256 winningTokenId = _randomness % tokenCount;
+        uint256 winningTokenId = randomness % tokenCount;
         address winnerAddress = ownerOf(winningTokenId);
 
-        uint256 rewardAmount = block.number < end
+        uint256 rewardAmount = block.number < endBlock
             ? address(this).balance / 2
             : address(this).balance;
 
-        payable(owner).transfer(rewardAmount);
+        payable(winnerAddress).transfer(rewardAmount);
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
