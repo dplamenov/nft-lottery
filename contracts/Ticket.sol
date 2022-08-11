@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol"
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 error InsufficientAmount();
 
@@ -35,7 +35,7 @@ contract Ticket is ERC721Upgradeable {
         ticketPrice = _ticketPrice;
     }
 
-    function buyTicket() active{
+    function buyTicket() active {
         if (msg.value < ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
         ++tokenCount;
