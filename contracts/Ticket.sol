@@ -16,9 +16,8 @@ contract Ticket is ERC721Upgradeable, ReentrancyGuardUpgradeable {
     uint64 public endBlock;
     uint256 public ticketPrice;
     uint256 public tokenCount;
-
-    bool isPickedSmall;
-    bool isPickedBig;
+    bool public isPickedSmall;
+    bool public isPickedBig;
     string baseURI;
     RandomWinner randomWinner;
 
@@ -43,15 +42,15 @@ contract Ticket is ERC721Upgradeable, ReentrancyGuardUpgradeable {
         string memory _name,
         string memory _symbol,
         string memory _baseURI,
-        uint64 _start,
-        uint64 _end,
+        uint64 _startBlock,
+        uint64 _endBlock,
         uint128 _ticketPrice,
         address _randomWinnerAddress
     ) external initializer {
         __ERC721_init(_name, _symbol);
         baseURI = _baseURI;
-        startBlock = _start;
-        endBlock = _end;
+        startBlock = _startBlock;
+        endBlock = _endBlock;
         ticketPrice = _ticketPrice;
         randomWinner = RandomWinner(_randomWinnerAddress);
     }
@@ -68,11 +67,17 @@ contract Ticket is ERC721Upgradeable, ReentrancyGuardUpgradeable {
         }
     }
 
-    function pickWinner() external gameStarted initializer {
+    function pickWinner() external gameStarted {
         if (
             (block.number < endBlock && isPickedSmall) ||
             (block.number >= endBlock && isPickedBig)
         ) revert WinnerAlreadyChosen();
+
+        if (block.number < endBlock) {
+            isPickedSmall = true;
+        } else {
+            isPickedBig = true;
+        }
 
         randomWinner.getRandomNumber("win(uint256)");
     }
