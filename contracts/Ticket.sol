@@ -31,6 +31,10 @@ contract Ticket is ERC721Upgradeable {
             revert OnlyRandomWinnerContract();
     }
 
+    modifier gameStarted() {
+        if (block.number < startBlock) revert GameNotStarted();
+    }
+
     function initialize(
         string memory _name,
         string memory _symbol,
@@ -60,9 +64,7 @@ contract Ticket is ERC721Upgradeable {
         }
     }
 
-    function pickWinner() external initializer {
-        if (block.number < startBlock) revert GameNotStarted();
-
+    function pickWinner() external gameStarted initializer {
         if (
             (block.number < end && pickedSmall) ||
             (block.number >= end && pickedBig)
@@ -71,9 +73,12 @@ contract Ticket is ERC721Upgradeable {
         randomWinner.getRandomNumber("win(uint256)");
     }
 
-    function win(uint256 randomness) external payable onlyRandomWinner {
-        if (block.number < startBlock) revert GameNotStarted();
-
+    function win(uint256 randomness)
+        external
+        payable
+        gameStarted
+        onlyRandomWinner
+    {
         uint256 winningTokenId = _randomness % tokenCount;
         address winnerAddress = ownerOf(winningTokenId);
 
