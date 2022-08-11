@@ -33,6 +33,7 @@ contract Ticket is ERC721Upgradeable {
 
     modifier gameStarted() {
         if (block.number < startBlock) revert GameNotStarted();
+        _;
     }
 
     function initialize(
