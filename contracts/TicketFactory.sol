@@ -6,7 +6,7 @@ import "./ITicket.sol";
 
 contract TicketFactory {
     address public immutable ticketBeacon;
-    address[] public deployedProxies;
+    address[] public _deployedProxies;
 
     event ProxyDeployed(address ticketProxyAddress);
 
@@ -38,7 +38,11 @@ contract TicketFactory {
             _randomWinnerAddress
         );
 
-        deployedProxies.push(ticketProxyAddress);
+        _deployedProxies.push(ticketProxyAddress);
         emit ProxyDeployed(ticketProxyAddress);
+    }
+
+    function getAllDeployedProxies() external view returns (address[] memory) {
+        return _deployedProxies;
     }
 }
