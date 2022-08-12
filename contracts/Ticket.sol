@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./RandomWinner.sol";
+import "hardhat/console.sol";
 
 error InsufficientAmount();
 error WinnerAlreadyChosen();
@@ -45,7 +46,7 @@ contract Ticket is ERC721Upgradeable, ReentrancyGuardUpgradeable {
         uint64 _startBlock,
         uint64 _endBlock,
         uint128 _ticketPrice,
-        address _randomWinnerAddress
+        address payable _randomWinnerAddress
     ) external initializer {
         __ERC721_init(_name, _symbol);
         baseURI = _baseURI;
