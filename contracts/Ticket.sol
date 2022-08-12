@@ -23,6 +23,13 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
     RandomWinner randomWinner;
 
     event TicketBought(uint256 tokenId, address user);
+    event ChangeReturn(uint256 change, address user);
+    event PickWinner();
+    event Win(
+        address winnerAddress,
+        uint256 rewardAmount,
+        uint256 winningTokenId
+    );
 
     modifier active() {
         if (block.number < startBlock || block.number > endBlock)
@@ -68,6 +75,7 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
 
         if (change >= 1 wei) {
             payable(msg.sender).transfer(change);
+            emit ChangeReturn(change, msg.sender);
         }
     }
 
@@ -76,6 +84,8 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
             (block.number < endBlock && isPickedSmall) ||
             (block.number >= endBlock && isPickedBig)
         ) revert WinnerAlreadyChosen();
+
+        emit PickWinner();
 
         if (block.number < endBlock) {
             isPickedSmall = true;
@@ -99,6 +109,8 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
         uint256 rewardAmount = block.number < endBlock
             ? address(this).balance / 2
             : address(this).balance;
+
+        emit Win(winnerAddress, rewardAmount, winningTokenId);
 
         payable(winnerAddress).transfer(rewardAmount);
     }
