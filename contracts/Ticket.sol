@@ -22,6 +22,8 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
     string baseURI;
     RandomWinner randomWinner;
 
+    event TicketBought(uint256 tokenId, address user);
+
     modifier active() {
         if (block.number < startBlock || block.number > endBlock)
             revert Unavailable();
@@ -59,6 +61,7 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
     function buyTicket() external payable active nonReentrant {
         if (msg.value < ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
+        emit TicketBought(tokenCount, msg.sender);
         ++tokenCount;
 
         uint256 change = msg.value - ticketPrice;
