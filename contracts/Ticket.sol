@@ -61,7 +61,7 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
         _mint(msg.sender, tokenCount);
         ++tokenCount;
 
-        uint256 change = ticketPrice - msg.value;
+        uint256 change = msg.value - ticketPrice;
 
         if (change >= 1 wei) {
             payable(msg.sender).transfer(change);
