@@ -6,8 +6,9 @@ import "./ITicket.sol";
 
 contract TicketFactory {
     address public immutable ticketBeacon;
-
     address[] public deployedProxies;
+
+    event ProxyDeployed(address ticketProxyAddress);
 
     constructor(address _ticketBeacon) {
         ticketBeacon = _ticketBeacon;
@@ -23,11 +24,11 @@ contract TicketFactory {
         address payable _randomWinnerAddress,
         uint256 _salt
     ) public {
-        address payable newTicketProxy = payable(
+        address payable ticketProxyAddress = payable(
             new TicketProxy{salt: bytes32(_salt)}(ticketBeacon)
         );
 
-        ITicket(newTicketProxy).initialize(
+        ITicket(ticketProxyAddress).initialize(
             _name,
             _symbol,
             _baseURI,
@@ -37,6 +38,7 @@ contract TicketFactory {
             _randomWinnerAddress
         );
 
-        deployedProxies.push(newTicketProxy);
+        deployedProxies.push(ticketProxyAddress);
+        emit ProxyDeployed(ticketProxyAddress);
     }
 }
