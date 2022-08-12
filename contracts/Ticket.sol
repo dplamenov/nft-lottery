@@ -88,6 +88,7 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
         payable
         gameStarted
         onlyRandomWinner
+        nonReentrant
     {
         uint256 winningTokenId = randomness % tokenCount;
         address winnerAddress = ownerOf(winningTokenId);
