@@ -18,7 +18,7 @@ contract RandomWinner is VRFConsumerBase {
         bytes32 _keyHash
     ) VRFConsumerBase(_vrfCoordinator, _link) {
         keyHash = _keyHash;
-        fee = 0.25 * 10**18;
+        fee = 2 * 10**18;
     }
 
     function getRandomNumber(string memory callbackSignature)
