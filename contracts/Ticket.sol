@@ -68,7 +68,6 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
     function buyTicket() external payable active nonReentrant {
         if (msg.value < ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
-        emit TicketBought(tokenCount, msg.sender);
         ++tokenCount;
 
         uint256 change = msg.value - ticketPrice;
@@ -77,6 +76,8 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
             payable(msg.sender).transfer(change);
             emit ChangeReturn(change, msg.sender);
         }
+
+        emit TicketBought(tokenCount, msg.sender);
     }
 
     function pickWinner() external gameStarted {
@@ -85,8 +86,6 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
             (block.number >= endBlock && isPickedBig)
         ) revert WinnerAlreadyChosen();
 
-        emit PickWinner();
-
         if (block.number < endBlock) {
             isPickedSmall = true;
         } else {
@@ -94,6 +93,7 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
         }
 
         randomWinner.getRandomNumber("win(uint256)");
+        emit PickWinner();
     }
 
     function win(uint256 randomness)
@@ -110,9 +110,9 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
             ? address(this).balance / 2
             : address(this).balance;
 
-        emit Win(winnerAddress, rewardAmount, winningTokenId);
-
         payable(winnerAddress).transfer(rewardAmount);
+
+        emit Win(winnerAddress, rewardAmount, winningTokenId);
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
