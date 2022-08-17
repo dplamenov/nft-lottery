@@ -64,6 +64,8 @@ contract Ticket is
         address payable _randomWinnerAddress
     ) external initializer {
         __ERC721_init(_name, _symbol);
+        __Ownable_init();
+
         baseURI = _baseURI;
         startBlock = _startBlock;
         endBlock = _endBlock;
