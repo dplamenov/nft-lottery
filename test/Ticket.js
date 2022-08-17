@@ -50,7 +50,7 @@ describe('Ticket', async function () {
     it('should emit TicketBought event', async () => {
       await expect(Ticket.buyTicket({ value: 1000000000 })).to
         .emit(Ticket, 'TicketBought')
-        .withArgs("0", deployer.address);
+        .withArgs("1", deployer.address);
     });
 
     it('check owner', async () => {
