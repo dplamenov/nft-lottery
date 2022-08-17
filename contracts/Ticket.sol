@@ -3,6 +3,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./RandomWinner.sol";
 import "./ITicket.sol";
 
@@ -12,7 +13,12 @@ error Unavailable();
 error GameNotStarted();
 error OnlyRandomWinnerContract();
 
-contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
+contract Ticket is
+    OwnableUpgradeable,
+    ITicket,
+    ERC721Upgradeable,
+    ReentrancyGuardUpgradeable
+{
     uint64 public startBlock;
     uint64 public endBlock;
     uint256 public ticketPrice;
@@ -80,7 +86,7 @@ contract Ticket is ITicket, ERC721Upgradeable, ReentrancyGuardUpgradeable {
         emit TicketBought(tokenCount, msg.sender);
     }
 
-    function pickWinner() external gameStarted {
+    function pickWinner() external gameStarted onlyOwner {
         if (
             (block.number < endBlock && isPickedSmall) ||
             (block.number >= endBlock && isPickedBig)
