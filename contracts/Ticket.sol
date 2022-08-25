@@ -74,17 +74,9 @@ contract Ticket is
     }
 
     function buyTicket() external payable active nonReentrant {
-        if (msg.value < ticketPrice) revert InsufficientAmount();
+        if (msg.value != ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
         ++tokenCount;
-
-        uint256 change = msg.value - ticketPrice;
-
-        if (change >= 1 wei) {
-            payable(msg.sender).transfer(change);
-            emit ChangeReturn(change, msg.sender);
-        }
-
         emit TicketBought(tokenCount, msg.sender);
     }
 
