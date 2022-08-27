@@ -61,16 +61,6 @@ describe('Ticket', async function () {
     it('should revert with InsufficientAmount', async () => {
       await expect(Ticket.buyTicket({ value: 125 })).to.be.revertedWith('InsufficientAmount');
     });
-
-    it('should return change', async () => {
-      await expect(Ticket.buyTicket({ value: 2000000000 })).not.to.reverted;
-    });
-
-    it('should emit ChangeReturn', async () => {
-      await expect(Ticket.buyTicket({ value: 2000000000 })).to
-        .emit(Ticket, 'ChangeReturn')
-        .withArgs(1000000000, deployer.address);
-    });
   });
 
   describe("Pick winner", async function () {
