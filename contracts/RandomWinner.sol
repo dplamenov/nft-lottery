@@ -49,6 +49,4 @@ contract RandomWinner is VRFConsumerBase {
         );
         if (!success) revert();
     }
-
-    fallback() external payable {}
 }
