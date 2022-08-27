@@ -7,11 +7,10 @@ describe('Ticket', async function () {
   let Ticket;
   let ticketData;
   let RandomWinner;
-  let RandomWinnerSigner;
   let RandomWinnerMOCK;
 
   beforeEach(async function () {
-    [deployer] = await ethers.getSigners();
+    [deployer, addr2] = await ethers.getSigners();
     RandomWinnerMOCK = await deployMockedRandomWinner();
 
     RandomWinner = await (await ethers.getContractFactory("RandomWinner")).deploy(VRFConsumerBaseData.vrfCoordinator, VRFConsumerBaseData.link, VRFConsumerBaseData.keyHash);
@@ -29,7 +28,7 @@ describe('Ticket', async function () {
       params: [RandomWinner.address],
     });
     RandomWinnerSigner = await ethers.getSigner(RandomWinner.address);
-    await deployer.sendTransaction({ to: RandomWinner.address, value: ethers.utils.parseEther("1") });
+    // await deployer.sendTransaction({ to: RandomWinner.address, value: ethers.utils.parseEther("1") });
 
     await Promise.all([
       RandomWinnerMOCK.mock.getRandomNumber.returns("0x" + Array(65).join('0')),
@@ -93,7 +92,9 @@ describe('Ticket', async function () {
       await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, RandomWinner.address]);
 
       await Ticket.buyTicket({ value: 1000000000 });
-      await expect(Ticket.connect(RandomWinnerSigner).win(12491824)).to.emit(Ticket, 'Win').withArgs(deployer.address, '500000000', '0');
+      Ticket.changeRandomWinner(addr2.address);
+
+      await expect(Ticket.connect(addr2).win(12491824)).to.emit(Ticket, 'Win').withArgs(deployer.address, '500000000', '0');
     });
 
     it('should revert with OnlyRandomWinnerContract', async () => {
@@ -109,26 +110,28 @@ describe('Ticket', async function () {
       await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, RandomWinner.address]);
 
       await Ticket.buyTicket({ value: 1000000000 });
+      await Ticket.changeRandomWinner(addr2.address);
 
       const balanceBefore = await ethers.provider.getBalance(deployer.address);
 
-      await expect(Ticket.connect(RandomWinnerSigner).win(12491824)).to.not.reverted;
+      await expect(Ticket.connect(addr2).win(12491824)).to.not.reverted;
 
       const balanceAfter = await ethers.provider.getBalance(deployer.address);
+      console.log(balanceBefore, balanceAfter);
+
       expect(balanceAfter.sub(balanceBefore)).to.be.eq(1000000000 / 2);
     });
 
     it('should get big win', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
       await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, RandomWinner.address]);
-
       await Ticket.buyTicket({ value: 1000000000 });
+      await Ticket.changeRandomWinner(addr2.address);
 
       const balanceBefore = await ethers.provider.getBalance(deployer.address);
 
       await hre.network.provider.send("hardhat_mine", ["0x3B9ACA00"]);
-
-      await expect(Ticket.connect(RandomWinnerSigner).win(12491824)).to.not.reverted;
+      await expect(Ticket.connect(addr2).win(12491824)).to.not.reverted;
 
       const balanceAfter = await ethers.provider.getBalance(deployer.address);
       expect(balanceAfter.sub(balanceBefore)).to.be.eq(1000000000);
