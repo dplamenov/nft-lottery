@@ -73,6 +73,13 @@ contract Ticket is
         randomWinner = RandomWinner(_randomWinnerAddress);
     }
 
+    function changeRandomWinner(address _randomWinnerAddress)
+        external
+        onlyOwner
+    {
+        randomWinner = RandomWinner(_randomWinnerAddress);
+    }
+
     function buyTicket() external payable active nonReentrant {
         if (msg.value != ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
