@@ -23,12 +23,6 @@ describe('Ticket', async function () {
     TicketBeacon = await (await ethers.getContractFactory("TicketBeacon")).deploy(Ticket.address);
     TicketProxy = await (await ethers.getContractFactory("TicketProxy")).deploy(TicketBeacon.address);
 
-    await hre.network.provider.request({
-      method: "hardhat_impersonateAccount",
-      params: [RandomWinner.address],
-    });
-    RandomWinnerSigner = await ethers.getSigner(RandomWinner.address);
-
     await Promise.all([
       RandomWinnerMOCK.mock.getRandomNumber.returns("0x" + Array(65).join('0')),
     ]);
