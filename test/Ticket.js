@@ -5,9 +5,9 @@ const VRFConsumerBaseData = require('./utils/VRFConsumerBaseData');
 
 describe('Ticket', async function () {
   let Ticket;
-  let ticketData;
   let RandomWinner;
   let RandomWinnerMOCK;
+  let ticketData;
 
   beforeEach(async function () {
     [deployer, addr2] = await ethers.getSigners();
