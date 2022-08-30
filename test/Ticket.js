@@ -28,7 +28,6 @@ describe('Ticket', async function () {
       params: [RandomWinner.address],
     });
     RandomWinnerSigner = await ethers.getSigner(RandomWinner.address);
-    // await deployer.sendTransaction({ to: RandomWinner.address, value: ethers.utils.parseEther("1") });
 
     await Promise.all([
       RandomWinnerMOCK.mock.getRandomNumber.returns("0x" + Array(65).join('0')),
