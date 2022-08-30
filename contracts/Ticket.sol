@@ -61,7 +61,7 @@ contract Ticket is
         uint64 _startBlock,
         uint64 _endBlock,
         uint128 _ticketPrice,
-        address payable _randomWinnerAddress
+        address _randomWinnerAddress
     ) external initializer {
         __ERC721_init(_name, _symbol);
         __Ownable_init();

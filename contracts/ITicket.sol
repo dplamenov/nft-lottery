@@ -9,7 +9,7 @@ interface ITicket {
         uint64 _startBlock,
         uint64 _endBlock,
         uint128 _ticketPrice,
-        address payable _randomWinnerAddress
+        address _randomWinnerAddress
     ) external;
 
     function buyTicket() external payable;
