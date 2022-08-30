@@ -1,5 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
+const { mineBlocks } = require("./utils/mineBlocks");
 const { deployMockedRandomWinner } = require("./utils/mock");
 const VRFConsumerBaseData = require('./utils/VRFConsumerBaseData');
 
@@ -62,7 +63,7 @@ describe('Ticket', async function () {
 
     it('pick small win', async () => {
       await Ticket.buyTicket({ value: 1000000000 });
-      await hre.network.provider.send("hardhat_mine", ["0x10"]);
+      await mineBlocks(hre, 15);
 
       await Ticket.pickWinner();
 
@@ -71,7 +72,7 @@ describe('Ticket', async function () {
 
     it('pick big win', async () => {
       await Ticket.buyTicket({ value: 1000000000 });
-      await hre.network.provider.send("hardhat_mine", ["0x200"]);
+      await mineBlocks(hre, 512);
 
       await Ticket.pickWinner();
 
@@ -123,7 +124,8 @@ describe('Ticket', async function () {
 
       const balanceBefore = await ethers.provider.getBalance(deployer.address);
 
-      await hre.network.provider.send("hardhat_mine", ["0x3B9ACA00"]);
+      await mineBlocks(hre, 1000000000);
+
       await expect(Ticket.connect(addr2).win(12491824)).to.not.reverted;
 
       const balanceAfter = await ethers.provider.getBalance(deployer.address);
