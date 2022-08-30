@@ -83,10 +83,9 @@ describe('Ticket', async function () {
   describe("Win", async function () {
     it('should emit Win event', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
-      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, RandomWinner.address]);
+      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, addr2.address]);
 
       await Ticket.buyTicket({ value: 1000000000 });
-      Ticket.changeRandomWinner(addr2.address);
 
       await expect(Ticket.connect(addr2).win(12491824)).to.emit(Ticket, 'Win').withArgs(deployer.address, '500000000', '0');
     });
@@ -101,10 +100,9 @@ describe('Ticket', async function () {
 
     it('should get small win', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
-      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, RandomWinner.address]);
+      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, addr2.address]);
 
       await Ticket.buyTicket({ value: 1000000000 });
-      await Ticket.changeRandomWinner(addr2.address);
 
       const balanceBefore = await ethers.provider.getBalance(deployer.address);
 
@@ -117,9 +115,8 @@ describe('Ticket', async function () {
 
     it('should get big win', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
-      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, RandomWinner.address]);
+      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, addr2.address]);
       await Ticket.buyTicket({ value: 1000000000 });
-      await Ticket.changeRandomWinner(addr2.address);
 
       const balanceBefore = await ethers.provider.getBalance(deployer.address);
 
