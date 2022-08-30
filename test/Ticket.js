@@ -111,7 +111,6 @@ describe('Ticket', async function () {
       await expect(Ticket.connect(addr2).win(12491824)).to.not.reverted;
 
       const balanceAfter = await ethers.provider.getBalance(deployer.address);
-      console.log(balanceBefore, balanceAfter);
 
       expect(balanceAfter.sub(balanceBefore)).to.be.eq(1000000000 / 2);
     });
