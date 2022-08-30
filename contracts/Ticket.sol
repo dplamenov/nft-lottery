@@ -28,13 +28,13 @@ contract Ticket is
     string baseURI;
     RandomWinner randomWinner;
 
-    event TicketBought(uint256 tokenId, address user);
-    event ChangeReturn(uint256 change, address user);
+    event TicketBought(uint256 tokenId, address indexed user);
+    event ChangeReturn(uint256 change, address indexed user);
     event PickWinner();
     event Win(
-        address winnerAddress,
+        address indexed winnerAddress,
         uint256 rewardAmount,
-        uint256 winningTokenId
+        uint256 indexed winningTokenId
     );
 
     modifier active() {
