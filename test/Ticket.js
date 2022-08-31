@@ -6,16 +6,12 @@ const VRFConsumerBaseData = require('./utils/VRFConsumerBaseData');
 
 describe('Ticket', async function () {
   let Ticket;
-  let RandomWinner;
   let RandomWinnerMOCK;
   let ticketData;
 
   beforeEach(async function () {
     [deployer, addr2] = await ethers.getSigners();
     RandomWinnerMOCK = await deployMockedRandomWinner();
-
-    RandomWinner = await (await ethers.getContractFactory("RandomWinner")).deploy(VRFConsumerBaseData.vrfCoordinator, VRFConsumerBaseData.link, VRFConsumerBaseData.keyHash);
-
     ticketData = ['Ticket', 'T1', 'test', 0, 100, 1000000000, RandomWinnerMOCK.address];
 
     Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
