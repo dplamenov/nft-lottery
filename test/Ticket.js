@@ -2,7 +2,6 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const { mineBlocks } = require("./utils/mineBlocks");
 const { deployMockedRandomWinner } = require("./utils/mock");
-const VRFConsumerBaseData = require('./utils/VRFConsumerBaseData');
 
 describe('Ticket', async function () {
   let Ticket;
