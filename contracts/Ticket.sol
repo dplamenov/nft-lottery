@@ -25,7 +25,6 @@ contract Ticket is
     uint256 public tokenCount;
     bool public isPickedSmall;
     bool public isPickedBig;
-    string public baseURI;
     RandomWinner randomWinner;
 
     event TicketBought(uint256 tokenId, address indexed user);
@@ -57,7 +56,6 @@ contract Ticket is
     function initialize(
         string memory _name,
         string memory _symbol,
-        string memory _baseURI,
         uint64 _startBlock,
         uint64 _endBlock,
         uint128 _ticketPrice,
@@ -66,7 +64,6 @@ contract Ticket is
         __ERC721_init(_name, _symbol);
         __Ownable_init();
 
-        baseURI = _baseURI;
         startBlock = _startBlock;
         endBlock = _endBlock;
         ticketPrice = _ticketPrice;
@@ -113,9 +110,5 @@ contract Ticket is
         payable(winnerAddress).transfer(rewardAmount);
 
         emit Win(winnerAddress, rewardAmount, winningTokenId);
-    }
-
-    function _baseURI() internal view virtual override returns (string memory) {
-        return baseURI;
     }
 }

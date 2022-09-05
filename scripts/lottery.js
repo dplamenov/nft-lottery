@@ -18,7 +18,7 @@ async function main() {
   const ticket = await Ticket.deploy();
 
   await ticket.deployed();
-  await ticket.initialize('Ticket', 'T1', 'test', 0, 150, 1000000000, randomWinner.address);
+  await ticket.initialize('Ticket', 'T1', 0, 150, 1000000000, randomWinner.address);
 
   console.log("Ticket deployed to:", ticket.address);
 

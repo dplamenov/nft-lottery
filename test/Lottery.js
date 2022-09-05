@@ -1,6 +1,5 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { mineBlocks } = require("./utils/mineBlocks");
 const { deployMockedRandomWinner } = require("./utils/mock");
 
 describe('Lottery', async function () {
@@ -11,7 +10,7 @@ describe('Lottery', async function () {
   beforeEach(async function () {
     [deployer, addr2] = await ethers.getSigners();
     RandomWinnerMOCK = await deployMockedRandomWinner();
-    ticketData = ['Ticket', 'T1', 'test', 0, 100, 1000000000, RandomWinnerMOCK.address];
+    ticketData = ['Ticket', 'T1', 0, 100, 1000000000, RandomWinnerMOCK.address];
 
     Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
     await Ticket.initialize(...ticketData);

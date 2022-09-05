@@ -17,7 +17,6 @@ contract TicketFactory {
     function deployProxy(
         string memory _name,
         string memory _symbol,
-        string memory _baseURI,
         uint64 _start,
         uint64 _end,
         uint128 _price,
@@ -31,7 +30,6 @@ contract TicketFactory {
         ITicket(ticketProxyAddress).initialize(
             _name,
             _symbol,
-            _baseURI,
             _start,
             _end,
             _price,

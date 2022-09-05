@@ -11,7 +11,7 @@ describe('Ticket', async function () {
   beforeEach(async function () {
     [deployer, addr2] = await ethers.getSigners();
     RandomWinnerMOCK = await deployMockedRandomWinner();
-    ticketData = ['Ticket', 'T1', 'test', 0, 100, 1000000000, RandomWinnerMOCK.address];
+    ticketData = ['Ticket', 'T1', 0, 100, 1000000000, RandomWinnerMOCK.address];
 
     Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
     await Ticket.initialize(...ticketData);
@@ -28,13 +28,9 @@ describe('Ticket', async function () {
     it('check properties', async () => {
       expect(await Ticket.name()).to.be.eq(ticketData[0]);
       expect(await Ticket.symbol()).to.be.eq(ticketData[1]);
-      expect(await Ticket.startBlock()).to.be.eq(ticketData[3]);
-      expect(await Ticket.endBlock()).to.be.eq(ticketData[4]);
-      expect(await Ticket.ticketPrice()).to.be.eq(ticketData[5]);
-    });
-
-    it('base uri getter', async () => {
-      expect(await Ticket.baseURI()).to.be.eq(ticketData[2]);
+      expect(await Ticket.startBlock()).to.be.eq(ticketData[2]);
+      expect(await Ticket.endBlock()).to.be.eq(ticketData[3]);
+      expect(await Ticket.ticketPrice()).to.be.eq(ticketData[4]);
     });
   });
 
@@ -56,7 +52,7 @@ describe('Ticket', async function () {
 
     it('should revert with Unavailable', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
-      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 1, 1000000000, addr2.address]);
+      await Ticket.initialize(...['Ticket', 'T1', 0, 1, 1000000000, addr2.address]);
       await mineBlocks(hre, 1);
       await expect(Ticket.buyTicket({ value: 1000000000 })).to.be.revertedWith('Unavailable');
     });
@@ -95,7 +91,7 @@ describe('Ticket', async function () {
   describe("Win", async function () {
     it('should emit Win event', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
-      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, addr2.address]);
+      await Ticket.initialize(...['Ticket', 'T1', 0, 100000, 1000000000, addr2.address]);
 
       await Ticket.buyTicket({ value: 1000000000 });
 
@@ -104,7 +100,7 @@ describe('Ticket', async function () {
 
     it('should revert with OnlyRandomWinnerContract', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
-      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, RandomWinnerMOCK.address]);
+      await Ticket.initialize(...['Ticket', 'T1', 0, 100000, 1000000000, RandomWinnerMOCK.address]);
 
       await Ticket.buyTicket({ value: 1000000000 });
       await expect(Ticket.win(12491824)).to.revertedWith('OnlyRandomWinnerContract');
@@ -112,7 +108,7 @@ describe('Ticket', async function () {
 
     it('should get small win', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
-      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, addr2.address]);
+      await Ticket.initialize(...['Ticket', 'T1', 0, 100000, 1000000000, addr2.address]);
 
       await Ticket.buyTicket({ value: 1000000000 });
 
@@ -127,7 +123,7 @@ describe('Ticket', async function () {
 
     it('should get big win', async () => {
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
-      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 100000, 1000000000, addr2.address]);
+      await Ticket.initialize(...['Ticket', 'T1', 0, 100000, 1000000000, addr2.address]);
       await Ticket.buyTicket({ value: 1000000000 });
 
       const balanceBefore = await ethers.provider.getBalance(deployer.address);

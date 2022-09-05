@@ -5,7 +5,6 @@ interface ITicket {
     function initialize(
         string memory _name,
         string memory _symbol,
-        string memory _baseURI,
         uint64 _startBlock,
         uint64 _endBlock,
         uint128 _ticketPrice,

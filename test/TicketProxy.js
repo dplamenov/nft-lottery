@@ -11,7 +11,7 @@ describe('TicketProxy', async function () {
     [deployer] = await ethers.getSigners();
 
     RandomWinner = await deployMockedRandomWinner();
-    ticketData = ['Ticket', 'T1', 'test', 0, 150, 1000000000, RandomWinner.address];
+    ticketData = ['Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address];
 
     Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
     await Ticket.initialize(...ticketData);

@@ -10,7 +10,7 @@ describe('TicketFactory', async function () {
     [deployer] = await ethers.getSigners();
 
     RandomWinner = await deployMockedRandomWinner();
-    const ticketData = ['Ticket', 'T1', 'test', 0, 150, 1000000000, RandomWinner.address];
+    const ticketData = ['Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address];
 
     const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
     await Ticket.initialize(...ticketData);
@@ -29,18 +29,18 @@ describe('TicketFactory', async function () {
 
   describe('deployProxy method', async function () {
     it('should deploy new proxy', async () => {
-      await TicketFactory.deployProxy('Ticket', 'T1', 'test', 0, 150, 1000000000, RandomWinner.address, 185121256);
+      await TicketFactory.deployProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 185121256);
       expect((await TicketFactory.getAllDeployedProxies()).length).to.deep.equal(1);
     });
 
     it('should deploy 2 new proxies', async () => {
-      await TicketFactory.deployProxy('Ticket', 'T1', 'test', 0, 150, 1000000000, RandomWinner.address, 12412512);
-      await TicketFactory.deployProxy('Ticket', 'T2', 'test', 0, 150, 1000000000, RandomWinner.address, 59424901);
+      await TicketFactory.deployProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 12412512);
+      await TicketFactory.deployProxy('Ticket', 'T2', 0, 150, 1000000000, RandomWinner.address, 59424901);
       expect((await TicketFactory.getAllDeployedProxies()).length).to.deep.equal(2);
     });
 
     it('should emit ProxyDeployed event', async () => {
-      await expect(TicketFactory.deployProxy('Ticket', 'T1', 'test', 0, 150, 1000000000, RandomWinner.address, 185121256))
+      await expect(TicketFactory.deployProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 185121256))
         .to.emit(TicketFactory, 'ProxyDeployed');
     });
   });

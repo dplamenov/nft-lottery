@@ -12,7 +12,7 @@ describe('TicketBeacon', async function () {
     [deployer] = await ethers.getSigners();
 
     RandomWinner = await deployMockedRandomWinner();
-    ticketData = ['Ticket', 'T1', 'test', 0, 150, 1000000000, RandomWinner.address];
+    ticketData = ['Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address];
 
     Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
     await Ticket.initialize(...ticketData);
@@ -22,7 +22,7 @@ describe('TicketBeacon', async function () {
 
   describe("Change implementation", async function () {
     it('Should change implementation', async () => {
-      const newTicketData = ['Ticket2', 'T2', 'test', 0, 150, 1000000000, RandomWinner.address];
+      const newTicketData = ['Ticket2', 'T2', 0, 150, 1000000000, RandomWinner.address];
 
       const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
       Ticket.initialize(newTicketData);
