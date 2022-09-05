@@ -53,6 +53,13 @@ describe('Ticket', async function () {
     it('should revert with InsufficientAmount', async () => {
       await expect(Ticket.buyTicket({ value: 125 })).to.be.revertedWith('InsufficientAmount');
     });
+
+    it('should revert with Unavailable', async () => {
+      const Ticket = await (await ethers.getContractFactory("Ticket")).deploy();
+      await Ticket.initialize(...['Ticket', 'T1', 'test', 0, 1, 1000000000, addr2.address]);
+      await mineBlocks(hre, 1);
+      await expect(Ticket.buyTicket({ value: 1000000000 })).to.be.revertedWith('Unavailable');
+    });
   });
 
   describe("Pick winner", async function () {
