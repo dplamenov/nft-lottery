@@ -15,7 +15,7 @@ contract Lottery is Ownable {
         ticketBeacon.upgradeTo(_ticketAddress);
     }
 
-    function getTicketImplementationAddress() public returns (address) {
+    function getTicketImplementationAddress() public view returns (address) {
         return ticketBeacon.implementation();
     }
 }
