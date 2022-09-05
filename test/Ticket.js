@@ -32,6 +32,10 @@ describe('Ticket', async function () {
       expect(await Ticket.endBlock()).to.be.eq(ticketData[4]);
       expect(await Ticket.ticketPrice()).to.be.eq(ticketData[5]);
     });
+
+    it('base uri getter', async () => {
+      expect(await Ticket.baseURI()).to.be.eq(ticketData[2]);
+    });
   });
 
   describe("Buy tickets", async function () {
@@ -72,6 +76,12 @@ describe('Ticket', async function () {
       await Ticket.pickWinner();
 
       expect(await Ticket.isPickedBig()).to.be.true;
+    });
+
+    it('should revert with WinnerAlreadyChosen', async () => {
+      await Ticket.pickWinner();
+      expect(await Ticket.isPickedBig()).to.be.true;
+      await expect(Ticket.pickWinner()).to.be.revertedWith('WinnerAlreadyChosen');
     });
   });
 
