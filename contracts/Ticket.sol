@@ -25,7 +25,7 @@ contract Ticket is
     uint256 public tokenCount;
     bool public isPickedSmall;
     bool public isPickedBig;
-    string baseURI;
+    string public baseURI;
     RandomWinner randomWinner;
 
     event TicketBought(uint256 tokenId, address indexed user);
