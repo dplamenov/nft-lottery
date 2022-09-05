@@ -1,13 +1,6 @@
-# Sample Hardhat Project
+# NFT Lottery
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+Run test using: `npx hardhat test`
 
-Try running some of the following tasks:
+Run test and test coverage using: `npx hardhat coverage`
 
-```shell
-npx hardhat help
-npx hardhat test
-GAS_REPORT=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
