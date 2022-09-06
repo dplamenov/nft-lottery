@@ -27,20 +27,38 @@ describe('TicketFactory', async function () {
     });
   });
 
-  describe('deployProxy method', async function () {
+  describe('deployTicketProxy method', async function () {
     it('should deploy new proxy', async () => {
-      await TicketFactory.deployProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 185121256);
+      await TicketFactory.deployTicketProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address);
       expect((await TicketFactory.getAllDeployedProxies()).length).to.deep.equal(1);
     });
 
     it('should deploy 2 new proxies', async () => {
-      await TicketFactory.deployProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 12412512);
-      await TicketFactory.deployProxy('Ticket', 'T2', 0, 150, 1000000000, RandomWinner.address, 59424901);
+      await TicketFactory.deployTicketProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address);
+      await TicketFactory.deployTicketProxy('Ticket', 'T2', 0, 150, 1000000000, RandomWinner.address);
       expect((await TicketFactory.getAllDeployedProxies()).length).to.deep.equal(2);
     });
 
     it('should emit ProxyDeployed event', async () => {
-      await expect(TicketFactory.deployProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 185121256))
+      await expect(TicketFactory.deployTicketProxy('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address))
+        .to.emit(TicketFactory, 'ProxyDeployed');
+    });
+  });
+
+  describe('deployTicketProxyDeterministic method', async function () {
+    it('should deploy new proxy', async () => {
+      await TicketFactory.deployTicketProxyDeterministic('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 185121256);
+      expect((await TicketFactory.getAllDeployedProxies()).length).to.deep.equal(1);
+    });
+
+    it('should deploy 2 new proxies', async () => {
+      await TicketFactory.deployTicketProxyDeterministic('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 12412512);
+      await TicketFactory.deployTicketProxyDeterministic('Ticket', 'T2', 0, 150, 1000000000, RandomWinner.address, 59424901);
+      expect((await TicketFactory.getAllDeployedProxies()).length).to.deep.equal(2);
+    });
+
+    it('should emit ProxyDeployed event', async () => {
+      await expect(TicketFactory.deployTicketProxyDeterministic('Ticket', 'T1', 0, 150, 1000000000, RandomWinner.address, 185121256))
         .to.emit(TicketFactory, 'ProxyDeployed');
     });
   });
