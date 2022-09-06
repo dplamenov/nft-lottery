@@ -23,6 +23,7 @@ contract TicketFactory {
         address payable _randomWinnerAddress,
         uint256 _salt
     ) public {
+        //deploy using create2
         address payable ticketProxyAddress = payable(
             new TicketProxy{salt: bytes32(_salt)}(ticketBeacon)
         );
