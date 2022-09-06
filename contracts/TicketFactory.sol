@@ -14,7 +14,7 @@ contract TicketFactory {
         ticketBeacon = _ticketBeacon;
     }
 
-    function deployProxy(
+    function deployTicketProxy(
         string memory _name,
         string memory _symbol,
         uint64 _start,
