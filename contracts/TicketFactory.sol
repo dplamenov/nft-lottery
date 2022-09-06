@@ -14,6 +14,26 @@ contract TicketFactory {
         ticketBeacon = _ticketBeacon;
     }
 
+    function deployTicketProxy(
+        string memory _name,
+        string memory _symbol,
+        uint64 _start,
+        uint64 _end,
+        uint128 _price,
+        address payable _randomWinnerAddress
+    ) public {
+        deployTicketProxyDeterministic(
+            _name,
+            _symbol,
+            _start,
+            _end,
+            _price,
+            _randomWinnerAddress,
+            0
+        );
+    }
+
+    //deploy using create2
     function deployTicketProxyDeterministic(
         string memory _name,
         string memory _symbol,
@@ -23,10 +43,9 @@ contract TicketFactory {
         address payable _randomWinnerAddress,
         uint256 _salt
     ) public {
-        //deploy using create2
-        address payable ticketProxyAddress = payable(
-            new TicketProxy{salt: bytes32(_salt)}(ticketBeacon)
-        );
+        address payable ticketProxyAddress = _salt == 0
+            ? payable(new TicketProxy(ticketBeacon))
+            : payable(new TicketProxy{salt: bytes32(_salt)}(ticketBeacon));
 
         ITicket(ticketProxyAddress).initialize(
             _name,
