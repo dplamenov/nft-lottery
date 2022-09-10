@@ -1,0 +1,280 @@
+ERC1967Upgrade._upgradeToAndCallUUPS(address,bytes,bool).slot (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#92) is a local variable never initialized
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#uninitialized-local-variables
+
+VRFConsumerBase.requestRandomness(bytes32,uint256) (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#152-166) ignores return value by LINK.transferAndCall(vrfCoordinator,_fee,abi.encode(_keyHash,USER_SEED_PLACEHOLDER)) (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#153)
+ERC721Upgradeable._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#399-421) ignores return value by IERC721ReceiverUpgradeable(to).onERC721Received(_msgSender(),from,tokenId,data) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#406-417)
+ERC1967Upgrade._upgradeToAndCall(address,bytes,bool) (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#65-74) ignores return value by Address.functionDelegateCall(newImplementation,data) (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#72)
+ERC1967Upgrade._upgradeToAndCallUUPS(address,bytes,bool) (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#81-99) ignores return value by IERC1822Proxiable(newImplementation).proxiableUUID() (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#92-96)
+ERC1967Upgrade._upgradeBeaconToAndCall(address,bytes,bool) (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#174-184) ignores return value by Address.functionDelegateCall(IBeacon(newBeacon).implementation(),data) (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#182)
+Ticket.pickWinner() (contracts/Ticket.sol#80-94) ignores return value by randomWinner.getRandomNumber(win(uint256)) (contracts/Ticket.sol#92)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-return
+
+Ticket.initialize(string,string,uint64,uint64,uint128,address)._name (contracts/Ticket.sol#57) shadows:
+        - ERC721Upgradeable._name (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#25) (state variable)
+Ticket.initialize(string,string,uint64,uint64,uint128,address)._symbol (contracts/Ticket.sol#58) shadows:
+        - ERC721Upgradeable._symbol (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#28) (state variable)
+TicketBeacon.constructor(address)._implementation (contracts/TicketBeacon.sol#7) shadows:
+        - UpgradeableBeacon._implementation (node_modules/@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol#17) (state variable)
+TicketProxy.constructor(address)._beacon (contracts/TicketProxy.sol#7) shadows:
+        - BeaconProxy._beacon() (node_modules/@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol#37-39) (function)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#local-variable-shadowing
+
+TicketFactory.constructor(address)._ticketBeacon (contracts/TicketFactory.sol#13) lacks a zero-check on :
+                - ticketBeacon = _ticketBeacon (contracts/TicketFactory.sol#14)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation
+
+Variable 'ERC721Upgradeable._checkOnERC721Received(address,address,uint256,bytes).retval (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#406)' in ERC721Upgradeable._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#399-421) potentially used before declaration: retval == IERC721ReceiverUpgradeable.onERC721Received.selector (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#407)
+Variable 'ERC721Upgradeable._checkOnERC721Received(address,address,uint256,bytes).reason (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#408)' in ERC721Upgradeable._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#399-421) potentially used before declaration: reason.length == 0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#409)
+Variable 'ERC721Upgradeable._checkOnERC721Received(address,address,uint256,bytes).reason (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#408)' in ERC721Upgradeable._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#399-421) potentially used before declaration: revert(uint256,uint256)(32 + reason,mload(uint256)(reason)) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#414)
+Variable 'ERC1967Upgrade._upgradeToAndCallUUPS(address,bytes,bool).slot (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#92)' in ERC1967Upgrade._upgradeToAndCallUUPS(address,bytes,bool) (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#81-99) potentially used before declaration: require(bool,string)(slot == _IMPLEMENTATION_SLOT,ERC1967Upgrade: unsupported proxiableUUID) (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#93)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#pre-declaration-usage-of-local-variables
+
+Reentrancy in TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256) (contracts/TicketFactory.sol#37-61):
+        External calls:
+        - ITicket(ticketProxyAddress).initialize(_name,_symbol,_start,_end,_price,_randomWinnerAddress) (contracts/TicketFactory.sol#50-57)
+        - ticketProxyAddress = address(new TicketProxy(ticketBeacon)) (contracts/TicketFactory.sol#46-48)
+        - ticketProxyAddress = address(new TicketProxy(ticketBeacon)) (contracts/TicketFactory.sol#46-48)
+        State variables written after the call(s):
+        - _deployedProxies.push(ticketProxyAddress) (contracts/TicketFactory.sol#59)
+Reentrancy in RandomWinner.getRandomNumber(string) (contracts/RandomWinner.sol#24-38):
+        External calls:
+        - requestId = requestRandomness(keyHash,fee) (contracts/RandomWinner.sol#35)
+                - LINK.transferAndCall(vrfCoordinator,_fee,abi.encode(_keyHash,USER_SEED_PLACEHOLDER)) (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#153)
+        State variables written after the call(s):
+        - requestToCallbackSignature[requestId] = callbackSignature (contracts/RandomWinner.sol#37)
+        - requestToSender[requestId] = msg.sender (contracts/RandomWinner.sol#36)
+Reentrancy in VRFConsumerBase.requestRandomness(bytes32,uint256) (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#152-166):
+        External calls:
+        - LINK.transferAndCall(vrfCoordinator,_fee,abi.encode(_keyHash,USER_SEED_PLACEHOLDER)) (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#153)
+        State variables written after the call(s):
+        - nonces[_keyHash] = nonces[_keyHash] + 1 (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#164)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-2
+
+Reentrancy in TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256) (contracts/TicketFactory.sol#37-61):
+        External calls:
+        - ITicket(ticketProxyAddress).initialize(_name,_symbol,_start,_end,_price,_randomWinnerAddress) (contracts/TicketFactory.sol#50-57)
+        - ticketProxyAddress = address(new TicketProxy(ticketBeacon)) (contracts/TicketFactory.sol#46-48)
+        - ticketProxyAddress = address(new TicketProxy(ticketBeacon)) (contracts/TicketFactory.sol#46-48)
+        Event emitted after the call(s):
+        - ProxyDeployed(ticketProxyAddress) (contracts/TicketFactory.sol#60)
+Reentrancy in Ticket.pickWinner() (contracts/Ticket.sol#80-94):
+        External calls:
+        - randomWinner.getRandomNumber(win(uint256)) (contracts/Ticket.sol#92)
+        Event emitted after the call(s):
+        - PickWinner() (contracts/Ticket.sol#93)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-3
+
+ERC721Upgradeable._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#399-421) uses assembly
+        - INLINE ASM (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#413-415)
+AddressUpgradeable.verifyCallResult(bool,bytes,string) (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#174-194) uses assembly
+        - INLINE ASM (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#186-189)
+Proxy._delegate(address) (node_modules/@openzeppelin/contracts/proxy/Proxy.sol#22-45) uses assembly
+        - INLINE ASM (node_modules/@openzeppelin/contracts/proxy/Proxy.sol#23-44)
+Address.verifyCallResult(bool,bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#201-221) uses assembly
+        - INLINE ASM (node_modules/@openzeppelin/contracts/utils/Address.sol#213-216)
+StorageSlot.getAddressSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#52-57) uses assembly
+        - INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#54-56)
+StorageSlot.getBooleanSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#62-67) uses assembly
+        - INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#64-66)
+StorageSlot.getBytes32Slot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#72-77) uses assembly
+        - INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#74-76)
+StorageSlot.getUint256Slot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#82-87) uses assembly
+        - INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#84-86)
+RandomWinner.getRandomNumber(string) (contracts/RandomWinner.sol#24-38) uses assembly
+        - INLINE ASM (contracts/RandomWinner.sol#30-32)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#assembly-usage
+
+Different versions of Solidity are used:
+        - Version used: ['^0.8.0', '^0.8.1', '^0.8.2', '^0.8.9']
+        - ^0.8.0 (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#2)
+        - ^0.8.0 (node_modules/@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol#2)
+        - ^0.8.0 (node_modules/@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol#2)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol#4)
+        - ^0.8.2 (node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol#4)
+        - ^0.8.1 (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts/access/Ownable.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts/interfaces/draft-IERC1822.sol#4)
+        - ^0.8.2 (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts/proxy/Proxy.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts/proxy/beacon/IBeacon.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol#4)
+        - ^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)
+        - ^0.8.0 (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#4)
+        - ^0.8.9 (contracts/ITicket.sol#2)
+        - ^0.8.9 (contracts/Lottery.sol#2)
+        - ^0.8.9 (contracts/RandomWinner.sol#2)
+        - ^0.8.9 (contracts/Ticket.sol#2)
+        - ^0.8.9 (contracts/TicketBeacon.sol#2)
+        - ^0.8.9 (contracts/TicketFactory.sol#2)
+        - ^0.8.9 (contracts/TicketProxy.sol#2)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#different-pragma-directives-are-used
+
+Pragma version^0.8.0 (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#2) allows old versions
+Pragma version^0.8.0 (node_modules/@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol#2) allows old versions
+Pragma version^0.8.0 (node_modules/@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol#2) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol#4) allows old versions
+Pragma version^0.8.2 (node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol#4) allows old versions
+Pragma version^0.8.1 (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/access/Ownable.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/interfaces/draft-IERC1822.sol#4) allows old versions
+Pragma version^0.8.2 (node_modules/@openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/proxy/Proxy.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/proxy/beacon/IBeacon.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol#4) allows old versions
+Pragma version^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4) allows old versions
+Pragma version^0.8.0 (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#4) allows old versions
+Pragma version^0.8.9 (contracts/ITicket.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7
+Pragma version^0.8.9 (contracts/Lottery.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7
+Pragma version^0.8.9 (contracts/RandomWinner.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7
+Pragma version^0.8.9 (contracts/Ticket.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7
+Pragma version^0.8.9 (contracts/TicketBeacon.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7
+Pragma version^0.8.9 (contracts/TicketFactory.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7
+Pragma version^0.8.9 (contracts/TicketProxy.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.6.12/0.7.6/0.8.7
+solc-0.8.9 is not recommended for deployment
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+
+Low level call in AddressUpgradeable.sendValue(address,uint256) (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#60-65):
+        - (success) = recipient.call{value: amount}() (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#63)
+Low level call in AddressUpgradeable.functionCallWithValue(address,bytes,uint256,string) (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#128-139):
+        - (success,returndata) = target.call{value: value}(data) (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#137)
+Low level call in AddressUpgradeable.functionStaticCall(address,bytes,string) (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#157-166):
+        - (success,returndata) = target.staticcall(data) (node_modules/@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol#164)
+Low level call in Address.sendValue(address,uint256) (node_modules/@openzeppelin/contracts/utils/Address.sol#60-65):
+        - (success) = recipient.call{value: amount}() (node_modules/@openzeppelin/contracts/utils/Address.sol#63)
+Low level call in Address.functionCallWithValue(address,bytes,uint256,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#128-139):
+        - (success,returndata) = target.call{value: value}(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#137)
+Low level call in Address.functionStaticCall(address,bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#157-166):
+        - (success,returndata) = target.staticcall(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#164)
+Low level call in Address.functionDelegateCall(address,bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#184-193):
+        - (success,returndata) = target.delegatecall(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#191)
+Low level call in RandomWinner.fulfillRandomness(bytes32,uint256) (contracts/RandomWinner.sol#40-51):
+        - (success) = requestToSender[requestId].call(abi.encodeWithSignature(requestToCallbackSignature[requestId],randomness)) (contracts/RandomWinner.sol#44-49)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+
+TicketProxy (contracts/TicketProxy.sol#6-16) should inherit from IBeacon (node_modules/@openzeppelin/contracts/proxy/beacon/IBeacon.sol#9-16)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#missing-inheritance
+
+Parameter VRFConsumerBase.requestRandomness(bytes32,uint256)._keyHash (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#152) is not in mixedCase
+Parameter VRFConsumerBase.requestRandomness(bytes32,uint256)._fee (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#152) is not in mixedCase
+Variable VRFConsumerBase.LINK (node_modules/@chainlink/contracts/src/v0.8/VRFConsumerBase.sol#168) is not in mixedCase
+Parameter VRFRequestIDBase.makeVRFInputSeed(bytes32,uint256,address,uint256)._keyHash (node_modules/@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol#20) is not in mixedCase
+Parameter VRFRequestIDBase.makeVRFInputSeed(bytes32,uint256,address,uint256)._userSeed (node_modules/@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol#21) is not in mixedCase
+Parameter VRFRequestIDBase.makeVRFInputSeed(bytes32,uint256,address,uint256)._requester (node_modules/@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol#22) is not in mixedCase
+Parameter VRFRequestIDBase.makeVRFInputSeed(bytes32,uint256,address,uint256)._nonce (node_modules/@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol#23) is not in mixedCase
+Parameter VRFRequestIDBase.makeRequestId(bytes32,uint256)._keyHash (node_modules/@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol#37) is not in mixedCase
+Parameter VRFRequestIDBase.makeRequestId(bytes32,uint256)._vRFInputSeed (node_modules/@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol#37) is not in mixedCase
+Function OwnableUpgradeable.__Ownable_init() (node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol#29-31) is not in mixedCase
+Function OwnableUpgradeable.__Ownable_init_unchained() (node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol#33-35) is not in mixedCase
+Variable OwnableUpgradeable.__gap (node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol#94) is not in mixedCase
+Function ReentrancyGuardUpgradeable.__ReentrancyGuard_init() (node_modules/@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol#40-42) is not in mixedCase
+Function ReentrancyGuardUpgradeable.__ReentrancyGuard_init_unchained() (node_modules/@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol#44-46) is not in mixedCase
+Variable ReentrancyGuardUpgradeable.__gap (node_modules/@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol#74) is not in mixedCase
+Function ERC721Upgradeable.__ERC721_init(string,string) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#45-47) is not in mixedCase
+Function ERC721Upgradeable.__ERC721_init_unchained(string,string) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#49-52) is not in mixedCase
+Variable ERC721Upgradeable.__gap (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#465) is not in mixedCase
+Function ContextUpgradeable.__Context_init() (node_modules/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol#18-19) is not in mixedCase
+Function ContextUpgradeable.__Context_init_unchained() (node_modules/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol#21-22) is not in mixedCase
+Variable ContextUpgradeable.__gap (node_modules/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol#36) is not in mixedCase
+Function ERC165Upgradeable.__ERC165_init() (node_modules/@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol#24-25) is not in mixedCase
+Function ERC165Upgradeable.__ERC165_init_unchained() (node_modules/@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol#27-28) is not in mixedCase
+Variable ERC165Upgradeable.__gap (node_modules/@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol#41) is not in mixedCase
+Parameter Lottery.changeImplementation(address)._ticketAddress (contracts/Lottery.sol#14) is not in mixedCase
+Parameter Ticket.initialize(string,string,uint64,uint64,uint128,address)._name (contracts/Ticket.sol#57) is not in mixedCase
+Parameter Ticket.initialize(string,string,uint64,uint64,uint128,address)._symbol (contracts/Ticket.sol#58) is not in mixedCase
+Parameter Ticket.initialize(string,string,uint64,uint64,uint128,address)._startBlock (contracts/Ticket.sol#59) is not in mixedCase
+Parameter Ticket.initialize(string,string,uint64,uint64,uint128,address)._endBlock (contracts/Ticket.sol#60) is not in mixedCase
+Parameter Ticket.initialize(string,string,uint64,uint64,uint128,address)._ticketPrice (contracts/Ticket.sol#61) is not in mixedCase
+Parameter Ticket.initialize(string,string,uint64,uint64,uint128,address)._randomWinnerAddress (contracts/Ticket.sol#62) is not in mixedCase
+Parameter TicketFactory.deployTicketProxy(string,string,uint64,uint64,uint128,address)._name (contracts/TicketFactory.sol#18) is not in mixedCase
+Parameter TicketFactory.deployTicketProxy(string,string,uint64,uint64,uint128,address)._symbol (contracts/TicketFactory.sol#19) is not in mixedCase
+Parameter TicketFactory.deployTicketProxy(string,string,uint64,uint64,uint128,address)._start (contracts/TicketFactory.sol#20) is not in mixedCase
+Parameter TicketFactory.deployTicketProxy(string,string,uint64,uint64,uint128,address)._end (contracts/TicketFactory.sol#21) is not in mixedCase
+Parameter TicketFactory.deployTicketProxy(string,string,uint64,uint64,uint128,address)._price (contracts/TicketFactory.sol#22) is not in mixedCase
+Parameter TicketFactory.deployTicketProxy(string,string,uint64,uint64,uint128,address)._randomWinnerAddress (contracts/TicketFactory.sol#23) is not in mixedCase
+Parameter TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256)._name (contracts/TicketFactory.sol#38) is not in mixedCase
+Parameter TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256)._symbol (contracts/TicketFactory.sol#39) is not in mixedCase
+Parameter TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256)._start (contracts/TicketFactory.sol#40) is not in mixedCase
+Parameter TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256)._end (contracts/TicketFactory.sol#41) is not in mixedCase
+Parameter TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256)._price (contracts/TicketFactory.sol#42) is not in mixedCase
+Parameter TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256)._randomWinnerAddress (contracts/TicketFactory.sol#43) is not in mixedCase
+Parameter TicketFactory.deployTicketProxyDeterministic(string,string,uint64,uint64,uint128,address,uint256)._salt (contracts/TicketFactory.sol#44) is not in mixedCase
+Variable TicketFactory._deployedProxies (contracts/TicketFactory.sol#9) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+
+Reentrancy in Ticket.win(uint256) (contracts/Ticket.sol#96-113):
+        External calls:
+        - address(winnerAddress).transfer(rewardAmount) (contracts/Ticket.sol#110)
+        Event emitted after the call(s):
+        - Win(winnerAddress,rewardAmount,winningTokenId) (contracts/Ticket.sol#112)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-4
+
+Variable UpgradeableBeacon._implementation (node_modules/@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol#17) is too similar to UpgradeableBeacon.constructor(address).implementation_ (node_modules/@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol#28)
+Variable TicketBeacon.constructor(address)._implementation (contracts/TicketBeacon.sol#7) is too similar to UpgradeableBeacon.constructor(address).implementation_ (node_modules/@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol#28)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#variable-names-are-too-similar
+
+ReentrancyGuardUpgradeable.__gap (node_modules/@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol#74) is never used in Ticket (contracts/Ticket.sol#16-114)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-state-variable
+
+renounceOwnership() should be declared external:
+        - OwnableUpgradeable.renounceOwnership() (node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol#66-68)
+transferOwnership(address) should be declared external:
+        - OwnableUpgradeable.transferOwnership(address) (node_modules/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol#74-77)
+balanceOf(address) should be declared external:
+        - ERC721Upgradeable.balanceOf(address) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#67-70)
+name() should be declared external:
+        - ERC721Upgradeable.name() (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#84-86)
+symbol() should be declared external:
+        - ERC721Upgradeable.symbol() (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#91-93)
+tokenURI(uint256) should be declared external:
+        - ERC721Upgradeable.tokenURI(uint256) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#98-103)
+approve(address,uint256) should be declared external:
+        - ERC721Upgradeable.approve(address,uint256) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#117-127)
+setApprovalForAll(address,bool) should be declared external:
+        - ERC721Upgradeable.setApprovalForAll(address,bool) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#141-143)
+transferFrom(address,address,uint256) should be declared external:
+        - ERC721Upgradeable.transferFrom(address,address,uint256) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#155-164)
+safeTransferFrom(address,address,uint256) should be declared external:
+        - ERC721Upgradeable.safeTransferFrom(address,address,uint256) (node_modules/@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol#169-175)
+renounceOwnership() should be declared external:
+        - Ownable.renounceOwnership() (node_modules/@openzeppelin/contracts/access/Ownable.sol#61-63)
+transferOwnership(address) should be declared external:
+        - Ownable.transferOwnership(address) (node_modules/@openzeppelin/contracts/access/Ownable.sol#69-72)
+implementation() should be declared external:
+        - UpgradeableBeacon.implementation() (node_modules/@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol#35-37)
+upgradeTo(address) should be declared external:
+        - UpgradeableBeacon.upgradeTo(address) (node_modules/@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol#49-52)
+changeImplementation(address) should be declared external:
+        - Lottery.changeImplementation(address) (contracts/Lottery.sol#14-16)
+getTicketImplementationAddress() should be declared external:
+        - Lottery.getTicketImplementationAddress() (contracts/Lottery.sol#18-20)
+getRandomNumber(string) should be declared external:
+        - RandomWinner.getRandomNumber(string) (contracts/RandomWinner.sol#24-38)
+deployTicketProxy(string,string,uint64,uint64,uint128,address) should be declared external:
+        - TicketFactory.deployTicketProxy(string,string,uint64,uint64,uint128,address) (contracts/TicketFactory.sol#17-34)
+beacon() should be declared external:
+        - TicketProxy.beacon() (contracts/TicketProxy.sol#9-11)
+implementation() should be declared external:
+        - TicketProxy.implementation() (contracts/TicketProxy.sol#13-15)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#public-function-that-could-be-declared-external
