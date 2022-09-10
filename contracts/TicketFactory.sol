@@ -14,6 +14,7 @@ contract TicketFactory {
         ticketBeacon = _ticketBeacon;
     }
 
+    /// @notice deploy ticket proxy
     function deployTicketProxy(
         string memory _name,
         string memory _symbol,
@@ -33,7 +34,8 @@ contract TicketFactory {
         );
     }
 
-    //deploy using create2
+    /// @notice deploy using create2
+    /// @dev if _salt is 0 deploy ticket proxy without using create2
     function deployTicketProxyDeterministic(
         string memory _name,
         string memory _symbol,
