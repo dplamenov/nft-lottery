@@ -70,6 +70,7 @@ contract Ticket is
         randomWinner = RandomWinner(_randomWinnerAddress);
     }
 
+    /// @notice buy ticket
     function buyTicket() external payable active nonReentrant {
         if (msg.value != ticketPrice) revert InsufficientAmount();
         _mint(msg.sender, tokenCount);
@@ -77,6 +78,8 @@ contract Ticket is
         emit TicketBought(tokenCount, msg.sender);
     }
 
+    /// @notice buy ticket
+    /// @dev call getRandomNumber on randomWinner and pass it callback signature to call with randomness
     function pickWinner() external gameStarted onlyOwner {
         if (
             (block.number < endBlock && isPickedSmall) ||
@@ -93,6 +96,8 @@ contract Ticket is
         emit PickWinner();
     }
 
+    /// @notice proccess win
+    /// @param randomness random number
     function win(uint256 randomness)
         external
         payable
@@ -100,13 +105,16 @@ contract Ticket is
         onlyRandomWinner
         nonReentrant
     {
+        //get winning token based on recieved random number
         uint256 winningTokenId = randomness % tokenCount;
+        //get address of winner
         address winnerAddress = ownerOf(winningTokenId);
 
         uint256 rewardAmount = block.number < endBlock
             ? address(this).balance / 2
             : address(this).balance;
 
+        // transfer reward
         payable(winnerAddress).transfer(rewardAmount);
 
         emit Win(winnerAddress, rewardAmount, winningTokenId);
